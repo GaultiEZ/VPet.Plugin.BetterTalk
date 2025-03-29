@@ -307,7 +307,7 @@ namespace VPet.Plugin.BetterTalk
             int index = random.Next(0, touchBodytext.Count());
             if (MW.Main.Core.Save.Feeling <= MW.Main.Core.Save.FeelingMax / 3.0)
             {
-                Random r = new Random();
+                Random r = new Random();  
                 int a = r.Next(0, 5);
                 if (a == 1)
                 {

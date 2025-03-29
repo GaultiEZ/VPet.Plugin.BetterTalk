@@ -56,7 +56,7 @@ namespace VPet.Plugin.BetterTalk
             }
         }
         public IntervalSet()
-        {
+        {  
             InitializeComponent();
             TranslateText();
         }

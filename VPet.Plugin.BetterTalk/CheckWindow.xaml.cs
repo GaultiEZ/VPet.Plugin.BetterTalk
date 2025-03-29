@@ -24,7 +24,7 @@ namespace VPet.Plugin.BetterTalk
     {
         public CheckWindow()
         {
-            InitializeComponent();
+            InitializeComponent();  
         }
 
         private void AgreementCheckBox_Checked(object sender, RoutedEventArgs e)
