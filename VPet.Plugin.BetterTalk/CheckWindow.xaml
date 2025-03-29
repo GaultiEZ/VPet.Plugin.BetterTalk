@@ -1,0 +1,7 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Window x:Class="VPet.Plugin.BetterTalk.CheckWindow" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Title="BetterTalk开发组提示：" Height="218" Width="397" xmlns:realtalk="clr-namespace:VPet.Plugin.BetterTalk;assembly=VPet.Plugin.BetterTalk">
+    <StackPanel Margin="10,10,10,9">
+        <TextBlock Text="要使用无限列表 请在确认聊天模式为选项模式的情况&#xA;下使用 自定 里的刷新按钮 如若出现报错请查看创意&#xA;工坊简介&#xA;     To use the infinite list, please use the refresh&#xA; button in the settings when confirming that the&#xA; chat mode is set to option mode. If an error&#xA; occurs, please check the workshop introduction." TextWrapping="Wrap" />
+        <CheckBox Name="AgreementCheckBox" Content="不再显示此弹窗Do not show window again                   " Foreground="#FF5A5A5A" Checked="AgreementCheckBox_Checked" />
+    </StackPanel>
+</Window> 

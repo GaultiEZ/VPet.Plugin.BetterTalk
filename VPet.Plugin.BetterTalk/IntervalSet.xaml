@@ -1,0 +1,121 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Window x:Class="VPet.Plugin.BetterTalk.IntervalSet" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:local="clr-namespace:VPet.Plugin.BetterTalk" xmlns:controls="http://metro.mahapps.com/winfx/xaml/controls" Title="BetterTalkMod Set" Height="310" Width="438">
+    <FrameworkElement.Resources>
+        <ResourceDictionary>
+            <Style x:Key="{x:Type TextBox}" TargetType="{x:Type TextBox}">
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type TextBox}">
+                            <Border Name="border" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="5">
+                                <ScrollViewer Name="PART_ContentHost" />
+                            </Border>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+            <Style TargetType="Button" x:Key="RoundedButtonStyle">
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="Button">
+                            <!-- 圆角背景 -->
+                            <Border x:Name="border" 
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="5">
+                                <!-- 圆角半径 -->
+                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Border>
+                            <!-- 鼠标悬停效果 -->
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter TargetName="border" Property="Background" Value="#BDBDBD"/>
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+            <Style x:Key="RoundedToggleButtonStyle" TargetType="{x:Type ToggleButton}">
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type ToggleButton}">
+                            <Border Name="RootBorder" Background="#E0E0E0" CornerRadius="15" Width="60" Height="30">
+                                <Ellipse Name="Thumb" HorizontalAlignment="Left" Width="26" Height="26" Margin="2" Fill="#FFFFFFFF" />
+                            </Border>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="ToggleButton.IsChecked" Value="True">
+                                    <Setter TargetName="RootBorder" Property="Border.Background" Value="#4CAF50" />
+                                    <Setter TargetName="Thumb" Property="HorizontalAlignment" Value="Right" />
+                                </Trigger>
+                                <Trigger Property="UIElement.IsMouseOver" Value="True">
+                                    <Setter TargetName="RootBorder" Property="Border.Background" Value="#BDBDBD" />
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+        </ResourceDictionary>
+    </FrameworkElement.Resources>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="35*"/>
+            <ColumnDefinition Width="111*"/>
+        </Grid.ColumnDefinitions>
+        <Grid Margin="30,2,0,2" Grid.ColumnSpan="2">
+            <Grid.Background>
+                <ImageBrush Stretch="UniformToFill" ImageSource="/VPet.Plugin.BetterTalk;component/rt.png"/>
+            </Grid.Background>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="20*" />
+                <RowDefinition Height="177*" />
+            </Grid.RowDefinitions>
+            <UIElement.Effect>
+                <BlurEffect Radius="10" />
+            </UIElement.Effect>
+        </Grid>
+        <Grid ZIndex="1" Grid.ColumnSpan="2">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <TextBlock Name="textBlock" Grid.Row="0" Grid.Column="0" TextWrapping="Wrap" Height="21" Margin="10,12,0,0" FontFamily="Palatino Linotype" FontSize="16" Text="主动说话间隔[ms]" HorizontalAlignment="Left" VerticalAlignment="Top" FontWeight="Bold" />
+            <TextBox Name="TalkTimeSetnum" Grid.Row="1" Grid.Column="0" HorizontalAlignment="Left" Height="21" Margin="10,5,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="66" BorderBrush="#FF5C85FF" Background="#FFEFEFEF" FontFamily="Segoe UI Semibold" />
+            <TextBlock x:Name="textBlock2" Grid.Row="1" Grid.Column="0" TextWrapping="Wrap" Height="21" Margin="10,26,0,0" FontFamily="Palatino Linotype" FontSize="16" Text="添加对话（摸头）" HorizontalAlignment="Left" VerticalAlignment="Top" FontWeight="Bold" Grid.ColumnSpan="2" />
+            <TextBox x:Name="AddTextBox1" Grid.Row="1" Grid.Column="0" HorizontalAlignment="Left" Height="21" Margin="10,48,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="255" BorderBrush="#FF5C85FF" Background="#FFEFEFEF" FontFamily="Segoe UI Semibold" Grid.ColumnSpan="2" />
+            <TextBlock x:Name="textBlock3" Grid.Row="1" Grid.Column="0" TextWrapping="Wrap" Height="21" Margin="10,69,0,0" FontFamily="Palatino Linotype" FontSize="16" Text="添加对话（摸身体）" HorizontalAlignment="Left" VerticalAlignment="Top" FontWeight="Bold" Grid.ColumnSpan="2" />
+            <TextBox x:Name="AddTextBox2" Grid.Row="1" Grid.Column="0" HorizontalAlignment="Left" Height="21" Margin="10,91,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="255" BorderBrush="#FF5C85FF" Background="#FFEFEFEF" FontFamily="Segoe UI Semibold" Grid.ColumnSpan="2" />
+            <Button x:Name="Button2" Grid.Column="1" Content="确认" HorizontalAlignment="Center" Height="21" Margin="0,91,0,0" Grid.Row="1" VerticalAlignment="Top" Width="34"  Style="{StaticResource RoundedButtonStyle}"
+                Background="#FFEFEFEF"
+                BorderBrush="#FF5C85FF"
+                Foreground="Black" FontWeight="Bold" Click="Button2_Click"/>
+            <Button x:Name="Button1" Grid.Column="1" Content="确认" HorizontalAlignment="Center" Height="21" Margin="0,48,0,0" Grid.Row="1" VerticalAlignment="Top" Width="34"  Style="{StaticResource RoundedButtonStyle}"
+                Background="#FFEFEFEF"
+                BorderBrush="#FF5C85FF"
+                Foreground="Black" FontWeight="Bold" Click="Button1_Click"/>
+            <Button x:Name="Button3" Content="打开摸头对话文件" HorizontalAlignment="Left" Height="21" Margin="10,176,0,0" Grid.Row="1" VerticalAlignment="Top" Width="128"  Style="{StaticResource RoundedButtonStyle}"
+                Background="#FFEFEFEF"
+                BorderBrush="#FF5C85FF"
+                Foreground="Black" FontWeight="Bold" Click="OpenTHFile" Grid.ColumnSpan="2"/>
+            <Button x:Name="Button4" Content="打开摸身体对话文件" HorizontalAlignment="Left" Height="21" Margin="0,176,0,0" Grid.Row="1" VerticalAlignment="Top" Width="128"  Style="{StaticResource RoundedButtonStyle}"
+                Background="#FFEFEFEF"
+                BorderBrush="#FF5C85FF"
+                Foreground="Black" FontWeight="Bold" Click="OpenTBFile" Grid.Column="1"/>
+            <TextBlock x:Name="textBlock4" Grid.Row="1" Grid.Column="0" TextWrapping="Wrap" Height="21" Margin="10,112,0,0" FontFamily="Palatino Linotype" FontSize="16" Text="添加对话（主动说话）" HorizontalAlignment="Left" VerticalAlignment="Top" FontWeight="Bold" Grid.ColumnSpan="2" />
+            <TextBox x:Name="AddTextBox3" Grid.Row="1" Grid.Column="0" HorizontalAlignment="Left" Height="21" Margin="10,134,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="255" BorderBrush="#FF5C85FF" Background="#FFEFEFEF" FontFamily="Segoe UI Semibold" Grid.ColumnSpan="2" />
+            <Button x:Name="Button5" Grid.Column="1" Content="确认" HorizontalAlignment="Center" Height="21" Margin="0,134,0,0" Grid.Row="1" VerticalAlignment="Top" Width="34"  Style="{StaticResource RoundedButtonStyle}"
+                Background="#FFEFEFEF"
+                BorderBrush="#FF5C85FF"
+                Foreground="Black" FontWeight="Bold" Click="Button5_Click"/>
+            <Button x:Name="Button4复制__C_" Content="打开主动说话对话文件" HorizontalAlignment="Left" Height="21" Margin="10,197,0,0" Grid.Row="1" VerticalAlignment="Top" Width="128"  Style="{StaticResource RoundedButtonStyle}"
+                Background="#FFEFEFEF"
+                BorderBrush="#FF5C85FF"
+                Foreground="Black" FontWeight="Bold" Click="OpenTTFile" Grid.ColumnSpan="2"/>
+        </Grid>
+    </Grid>
+</Window>

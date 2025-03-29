@@ -1,0 +1,36 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <UseWPF>true</UseWPF>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="rt.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="LinePutScript" Version="1.11.9" />
+    <PackageReference Include="LinePutScript.Localization.WPF" Version="1.0.7" />
+    <PackageReference Include="Panuon.WPF.UI" Version="1.3.0.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="VPet-Simulator.Core">
+      <HintPath>G:\MYLIB\VPetNEW\VPet\VPet-Simulator.Windows.Interface\bin\Debug\net8.0-windows\VPet-Simulator.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="VPet-Simulator.Windows">
+      <HintPath>G:\MYLIB\VPetNEW\VPet\VPet-Simulator.Windows\bin\x64\Debug\net8.0-windows\VPet-Simulator.Windows.dll</HintPath>
+    </Reference>
+    <Reference Include="VPet-Simulator.Windows.Interface">
+      <HintPath>G:\MYLIB\VPetNEW\VPet\VPet-Simulator.Windows.Interface\bin\Debug\net8.0-windows\VPet-Simulator.Windows.Interface.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <SplashScreen Include="rt.png" />
+  </ItemGroup>
+
+</Project>
