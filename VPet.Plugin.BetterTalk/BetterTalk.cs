@@ -63,15 +63,20 @@ namespace VPet.Plugin.BetterTalk
 
         private CheckWindow CW;
 
+        public UIElement UIE;
+
         public System.Timers.Timer SayTimer;
 
         public override string PluginName => "BetterTalk";
+
+        string[] setting = new string[8];
 
         public BetterTalk(IMainWindow mainwin) : base(mainwin)
         {
             touchHeadtext = new List<string>();
             touchBodytext = new List<string>();
             timertext = new List<string>();
+
         }
 
         private void GetOutputtext()
@@ -89,11 +94,14 @@ namespace VPet.Plugin.BetterTalk
             }
         }
 
+        private void SetSetting()
+        {
+            setting = File.ReadAllLines(Environment.CurrentDirectory + @"\Setting.txt");
+        }
         private void SetTimer()
         {
-            SayTimer.Elapsed += new ElapsedEventHandler(SayTimer_Elapsed);
-            string TargetPath = Environment.CurrentDirectory + "/TimerAndTimeText.txt";
-            SayTimer.Interval = double.Parse(File.ReadAllText(TargetPath));
+            SayTimer.Elapsed += SayTimer_Elapsed;
+            SayTimer.Interval = double.Parse(setting[0]);
         }
 
         public void GetTalkSelectNumber()
@@ -118,7 +126,19 @@ namespace VPet.Plugin.BetterTalk
                 ShowError("³öÏÖ´íÎó ´íÎó´úÂë£ºUE5N");
             }
         }
+        
+        public void WriteSetFile()
+        {
 
+            File.WriteAllLines(Environment.CurrentDirectory + @"\Setting.txt",setting);
+        }
+        public void CheckIsTimerOpen()
+        {
+            if (setting[1]=="1")
+            {
+                SayTimer.Start();
+            }
+        }
         public void GetTalkSelect()
         {
             ref MainWindow val = ref mww;
@@ -224,8 +244,11 @@ namespace VPet.Plugin.BetterTalk
             mww = MW as MainWindow;
             SetTouchTalk();
             SetTimerVPET();
-            CreatAndReadTalkingFile();
+            CreatSetFile();
+            CheckFile();
+            SetSetting();
             SetTimer();
+            CheckIsTimerOpen();
         }
 
         public override void LoadDIY()
@@ -254,7 +277,7 @@ namespace VPet.Plugin.BetterTalk
 
         public override void Setting()
         {
-            string TargetPath = Environment.CurrentDirectory + @"\TimerAndTimeText.txt";
+            string TargetPath = Environment.CurrentDirectory + @"\Setting.txt";
             Application.Current.Dispatcher.Invoke(delegate
             {
                 set = new IntervalSet
@@ -267,17 +290,23 @@ namespace VPet.Plugin.BetterTalk
                 set.textBlock.Text = set.textBlock.Text.Translate();
                 set.ShowDialog();
             });
-            File.WriteAllText(TargetPath, SayTimer.Interval.ToString());
+            setting[0] = SayTimer.Interval.ToString();
+            WriteSetFile();
+
         }
 
         private void OffTimer_Click(object sender, RoutedEventArgs e)
         {
             SayTimer.Stop();
+            setting[1] = "0";
+            WriteSetFile();
         }
 
         private void OpenTimer_Click(object sender, RoutedEventArgs e)
         {
             SayTimer.Start();
+            setting[1] = "1";
+            WriteSetFile();
         }
 
         private void SayTimer_Elapsed(object? sender, ElapsedEventArgs e)
@@ -364,7 +393,7 @@ namespace VPet.Plugin.BetterTalk
             }
         }
 
-        public void CreatAndReadTalkingFile()
+        private void CheckFile()
         {
             string pathCheck = Environment.CurrentDirectory + @"\check.txt";
             if (!File.Exists(pathCheck))
@@ -377,13 +406,17 @@ namespace VPet.Plugin.BetterTalk
                     });
                 });
             }
+        }
+
+        public void CreatSetFile()
+        {         
             string talkingtxtFile = LoaddllPath("VPet.Plugin.BetterTalk") + @"\TouchHeadText.txt";
             string talkingtxtFileB = LoaddllPath("VPet.Plugin.BetterTalk") + @"\TouchBodyText.txt";
-            string talkingtxtFileC = LoaddllPath("VPet.Plugin.BetterTalk") + @"\TimerAndTimeText.txt";
+            string talkingtxtFileC = LoaddllPath("VPet.Plugin.BetterTalk") + @"\Setting.txt";
             string talkingtxtFileD = LoaddllPath("VPet.Plugin.BetterTalk") + @"\TimerText.txt";
             string path = Environment.CurrentDirectory + @"\TouchHeadText.txt";
             string path2 = Environment.CurrentDirectory + @"\TouchBodyText.txt";
-            string path3 = Environment.CurrentDirectory + @"\TimerAndTimeText.txt";
+            string path3 = Environment.CurrentDirectory + @"\Setting.txt";
             string path4 = Environment.CurrentDirectory + @"\TimerText.txt";
             if (!File.Exists(path))
             {
@@ -433,8 +466,11 @@ namespace VPet.Plugin.BetterTalk
             };
             msgbar.EndTimer.Interval = 1.0;
             msgbar.ShowTimer.Elapsed += new ElapsedEventHandler(ShowTimer_Elapsed);
-            msgbar.CloseTimer.Interval = 70;
+            msgbar.CloseTimer.Interval = 80;
+
         }
+
+
 
         private void RelsSelect()
         {
