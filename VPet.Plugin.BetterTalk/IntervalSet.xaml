@@ -3,7 +3,7 @@
     <FrameworkElement.Resources>
         <ResourceDictionary>
             <Style x:Key="{x:Type TextBox}" TargetType="{x:Type TextBox}">
-                <Setter Property="Template">  
+                <Setter Property="Template">   
                     <Setter.Value>
                         <ControlTemplate TargetType="{x:Type TextBox}">
                             <Border Name="border" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="5">
