@@ -52,7 +52,7 @@ namespace VPet.Plugin.BetterTalk
             }
             catch
             {
-                MessageBox.Show("确保你输入的是数字！".Translate());
+                MessageBox.Show("确保你输入的是数字！".Translate());  
             }
         }
         public IntervalSet()
