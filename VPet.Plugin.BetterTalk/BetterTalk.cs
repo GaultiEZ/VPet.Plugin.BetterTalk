@@ -58,12 +58,16 @@ namespace VPet.Plugin.BetterTalk
         private MenuItem OpenTimer;
 
         private MenuItem OffTimer;
+        private MenuItem ClockTalkRT;
 
         private IntervalSet set;
 
         private CheckWindow CW;
 
         public UIElement UIE;
+
+        public static ClockTalk2 clockTalk;
+        //public static List<ClockOrTimerControler> cocList { set; get; } = new List<ClockOrTimerControler>();
 
         public System.Timers.Timer SayTimer;
 
@@ -76,6 +80,8 @@ namespace VPet.Plugin.BetterTalk
             touchHeadtext = new List<string>();
             touchBodytext = new List<string>();
             timertext = new List<string>();
+            Application.Current.Dispatcher.Invoke(() => { clockTalk = new ClockTalk2(this); });
+            
 
         }
 
@@ -93,7 +99,7 @@ namespace VPet.Plugin.BetterTalk
                 ShowError("出现错误 错误代码：UE7N");
             }
         }
-
+        
         private void SetSetting()
         {
             setting = File.ReadAllLines(Environment.CurrentDirectory + @"\Setting.txt");
@@ -200,6 +206,8 @@ namespace VPet.Plugin.BetterTalk
             {
                 ShowError("加载遇到问题 请确认当前是选项式聊天 错误代码：E1N 如果不知道怎么解决可以查看MOD创意工坊页面简介".Translate());
             }
+            
+            
         }
 
         public void GetEventShow()
@@ -250,6 +258,7 @@ namespace VPet.Plugin.BetterTalk
             SetTimer();
             CheckIsTimerOpen();
         }
+       
 
         public override void LoadDIY()
         {
@@ -262,6 +271,11 @@ namespace VPet.Plugin.BetterTalk
             {
                 Header = "定时讲话".Translate()
             };
+            ClockTalkRT = new MenuItem
+            {
+                Header = "闹钟讲话".Translate()
+            };
+            
             OpenTimer = new MenuItem();
             OffTimer = new MenuItem();
             OpenTimer.Click += OpenTimer_Click;
@@ -273,6 +287,17 @@ namespace VPet.Plugin.BetterTalk
 
             MW.Main.ToolBar.MenuDIY.Items.Add(menuItemRT);
             MW.Main.ToolBar.MenuDIY.Items.Add(TrunTimer);
+            MW.Main.ToolBar.MenuDIY.Items.Add(ClockTalkRT);
+            ClockTalkRT.Click += ClockTalkRT_Click;
+        }
+
+        private void ClockTalkRT_Click(object sender, RoutedEventArgs e)
+        {
+            Application.Current.Dispatcher.Invoke(() =>
+            {
+                clockTalk.Visibility = Visibility.Visible;
+            });
+            
         }
 
         public override void Setting()
@@ -468,6 +493,10 @@ namespace VPet.Plugin.BetterTalk
             msgbar.ShowTimer.Elapsed += new ElapsedEventHandler(ShowTimer_Elapsed);
             msgbar.CloseTimer.Interval = 80;
 
+        }
+       public void ClockSay()
+        {
+            
         }
 
 
