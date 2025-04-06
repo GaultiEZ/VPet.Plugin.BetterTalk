@@ -13,14 +13,14 @@
             <ColumnDefinition Width="193*"/>
             <ColumnDefinition Width="7*"/>
         </Grid.ColumnDefinitions>
-        <TextBlock x:Name="TimeText" HorizontalAlignment="Left" Height="59" Margin="4,3,0,0" TextWrapping="Wrap" Text="8  :  29" VerticalAlignment="Top" Width="166" FontSize="48" FontFamily="Microsoft PhagsPa" FontWeight="Bold" Foreground="Black"/>
-        <TextBlock x:Name="DayText" HorizontalAlignment="Left" Height="17" Margin="100,56,0,0" TextWrapping="Wrap" Text="每一天" VerticalAlignment="Top" Width="87" FontFamily="Arial Black" FontWeight="Bold" FontSize="16"/>
-        <Border BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Height="66" Margin="4,0,0,0" VerticalAlignment="Center" Width="161"/>
+        <TextBlock x:Name="TimeText" HorizontalAlignment="Left" Height="59" Margin="7,-3,0,0" TextWrapping="Wrap" Text="8  :  29" VerticalAlignment="Top" Width="166" FontSize="48" FontFamily="Microsoft PhagsPa" FontWeight="Bold" Foreground="Black"/>
+        <TextBlock x:Name="DayText" HorizontalAlignment="Left" Height="17" Margin="106,52,0,0" TextWrapping="Wrap" Text="每一天" VerticalAlignment="Top" Width="87" FontFamily="Arial Black" FontWeight="Bold" FontSize="16"/>
+        <Border BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Height="66" Margin="4,8,0,0" VerticalAlignment="Top" Width="161"/>
         <Button x:Name="EnableButton" Content="" Grid.ColumnSpan="2" HorizontalAlignment="Left" Height="26" Margin="170,3,0,0" VerticalAlignment="Top" Width="27" FontWeight="Bold" FontFamily="Segoe UI Black" FontSize="18" Foreground="#FF6F6F6F" Click="Button_Click">
             <Button.Background>
                 <ImageBrush ImageSource="/VPet.Plugin.BetterTalk;component/bettertalk.png"/>
             </Button.Background>
         </Button>
-        <Button x:Name="DeleteButton" Content="D" Grid.ColumnSpan="2" HorizontalAlignment="Left" Height="26" Margin="170,59,0,0" VerticalAlignment="Top" Width="26" FontWeight="Bold" FontFamily="Segoe UI Black" FontSize="16" Foreground="Red" Background="#FF9A9A9A" Click="DeleteButtonClick"/>
+        <Button x:Name="DeleteButton" Content="D" Grid.ColumnSpan="2" HorizontalAlignment="Left" Height="26" Margin="170,0,0,0" VerticalAlignment="Center" Width="27" FontWeight="Bold" FontFamily="Segoe UI Black" FontSize="16" Foreground="Red" Background="#FF9A9A9A" Click="DeleteButtonClick"/>
     </Grid>
 </UserControl>

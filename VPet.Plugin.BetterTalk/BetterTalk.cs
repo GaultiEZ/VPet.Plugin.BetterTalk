@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Threading.Tasks;
 using System.Timers;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Markup;
 using System.Windows.Threading;
 using LinePutScript.Localization.WPF;
-using VPet.Plugin.BetterTalk;
+using Newtonsoft.Json;
 using VPet_Simulator.Core;
 using VPet_Simulator.Windows;
 using VPet_Simulator.Windows.Interface;
@@ -26,6 +26,16 @@ namespace VPet.Plugin.BetterTalk
         private List<string>? touchBodytext;
 
         private List<string>? timertext;
+
+        private List<string>? playtext;
+
+        private List<string>? playjumptext;
+
+        private List<string>? livetext;
+
+        private List<string>? worktext;
+
+        private List<string>? sleeptext;
 
         public MessageBar msgbar;
 
@@ -80,8 +90,13 @@ namespace VPet.Plugin.BetterTalk
             touchHeadtext = new List<string>();
             touchBodytext = new List<string>();
             timertext = new List<string>();
+            playjumptext = new List<string>();
+            playtext = new List<string>();
+            worktext = new List<string>();
+            livetext = new List<string>();
+            sleeptext = new List<string>();
             Application.Current.Dispatcher.Invoke(() => { clockTalk = new ClockTalk2(this); });
-            
+
 
         }
 
@@ -210,6 +225,24 @@ namespace VPet.Plugin.BetterTalk
             
         }
 
+        public void DelSystemSentence()
+        {
+            try
+            {
+                mww.ClickTexts.Remove(new ClickText("你知道吗? 鼠标右键可以打开菜单栏"));
+                mww.ClickTexts.Remove(new ClickText("你知道吗? 你可以在设置里面修改游戏的缩放比例"));
+                mww.ClickTexts.Remove(new ClickText("想要宠物不乱动? 设置里可以设置智能移动或者关闭移动"));
+                mww.ClickTexts.Remove(new ClickText("这游戏开发这么慢,都怪画师太咕了"));
+                //ClickTexts.Add(new ClickText("有建议/游玩反馈? 来 菜单-系统-反馈中心 反馈吧"));
+                mww.ClickTexts.Remove(new ClickText("长按脑袋拖动桌宠到你喜欢的任意位置"));
+            }
+            catch
+            {
+                MessageBox.Show("删除对话时进程中断 请反馈BetterTalk开发组".Translate());                
+            }
+
+
+        }
         public void GetEventShow()
         {
             Type type = typeof(VPet_Simulator.Core.ToolBar);
@@ -246,20 +279,26 @@ namespace VPet.Plugin.BetterTalk
 
         public override void LoadPlugin()
         {
-            msgbar = (MessageBar)MW.Main.MsgBar;
-            SayTimer = new System.Timers.Timer();
-            CW = new CheckWindow();
-            mww = MW as MainWindow;
-            SetTouchTalk();
-            SetTimerVPET();
-            CreatSetFile();
-            CheckFile();
-            SetSetting();
-            SetTimer();
-            CheckIsTimerOpen();
-        }
-       
+            Task.Run(() =>
+            {
+                Application.Current.Dispatcher.Invoke(() =>
+                {
 
+                    msgbar = (MessageBar)MW.Main.MsgBar;
+                    SayTimer = new System.Timers.Timer();
+                    CW = new CheckWindow();
+                    mww = MW as MainWindow;
+                });
+                SetTouchTalk();
+                SetTimerVPET();
+                CreatSetFile();
+                CheckFile();
+                SetSetting();
+                SetTimer();
+                CheckIsTimerOpen();
+                DelSystemSentence();
+            });
+        }
         public override void LoadDIY()
         {
             menuItemRT = new MenuItem
@@ -336,12 +375,65 @@ namespace VPet.Plugin.BetterTalk
 
         private void SayTimer_Elapsed(object? sender, ElapsedEventArgs e)
         {
-            if (MW.Main.State == 0)
+            
+            if (MW.Main.State == Main.WorkingState.Nomal && MW.Main.DisplayType.Type != GraphInfo.GraphType.Sleep)
             {
+                
                 Random r = new Random();
                 int index = r.Next(0, timertext.Count());
                 MW.Main.SayRnd(timertext[index]);
             }
+            if (MW.Main.State == Main.WorkingState.Work)
+            {
+
+
+                if (MW.Main.NowWork.NameTrans == "跳绳".Translate())
+                {
+                    
+                    Random r = new Random();
+                    int index = r.Next(0, playjumptext.Count());
+                    MW.Main.SayRnd(playjumptext[index]);
+                }
+
+                if (MW.Main.NowWork.NameTrans == "直播".Translate())
+                {
+                    
+                    Random r = new Random();
+                    int index = r.Next(0, livetext.Count());
+                    MW.Main.SayRnd(livetext[index]);
+                }
+
+                if (MW.Main.NowWork.NameTrans == "玩游戏".Translate())
+                {
+                    
+                    Random r = new Random();
+                    int index = r.Next(0, playtext.Count());
+                    MW.Main.SayRnd(playtext[index]);
+                }
+                if (MW.Main.NowWork.Type == GraphHelper.Work.WorkType.Work && MW.Main.NowWork.NameTrans != "直播".Translate())
+                {
+                    
+                    Random r = new Random();
+                    int index = r.Next(0, worktext.Count());
+                    MW.Main.SayRnd(worktext[index]);
+                }
+                
+            }
+            if (MW.Main.State == Main.WorkingState.Sleep)
+            {
+                
+                
+                Random r = new Random();
+                int a = r.Next(0, 60);
+                if (a == 8)
+                {
+                    int index = r.Next(0, sleeptext.Count());
+                    MW.Main.SayRnd(sleeptext[index]);
+                }
+                
+
+            }
+
         }
 
         private void SetTouchTalk()
@@ -433,16 +525,29 @@ namespace VPet.Plugin.BetterTalk
             }
         }
 
+
+
         public void CreatSetFile()
         {         
             string talkingtxtFile = LoaddllPath("VPet.Plugin.BetterTalk") + @"\TouchHeadText.txt";
             string talkingtxtFileB = LoaddllPath("VPet.Plugin.BetterTalk") + @"\TouchBodyText.txt";
             string talkingtxtFileC = LoaddllPath("VPet.Plugin.BetterTalk") + @"\Setting.txt";
             string talkingtxtFileD = LoaddllPath("VPet.Plugin.BetterTalk") + @"\TimerText.txt";
+            string talkingtxtFilePlay = LoaddllPath("VPet.Plugin.BetterTalk") + @"\PlayText.txt";
+            string talkingtxtFileJump = LoaddllPath("VPet.Plugin.BetterTalk") + @"\JumpText.txt";
+            string talkingtxtFileLive = LoaddllPath("VPet.Plugin.BetterTalk") + @"\LIVEtext.txt";
+            string talkingtxtFileWork = LoaddllPath("VPet.Plugin.BetterTalk") + @"\WorkText.txt";
+            string talkingtxtFileSleep = LoaddllPath("VPet.Plugin.BetterTalk") + @"\SleepText.txt";
+
             string path = Environment.CurrentDirectory + @"\TouchHeadText.txt";
             string path2 = Environment.CurrentDirectory + @"\TouchBodyText.txt";
             string path3 = Environment.CurrentDirectory + @"\Setting.txt";
             string path4 = Environment.CurrentDirectory + @"\TimerText.txt";
+            string path5 = Environment.CurrentDirectory + @"\PlayText.txt";
+            string path6 = Environment.CurrentDirectory + @"\JumpText.txt";
+            string path7 = Environment.CurrentDirectory + @"\LIVEtext.txt";
+            string path8 = Environment.CurrentDirectory + @"\WorkText.txt";
+            string path9 = Environment.CurrentDirectory + @"\SleepText.txt";
             if (!File.Exists(path))
             {
                 File.Copy(talkingtxtFile, path);
@@ -459,20 +564,66 @@ namespace VPet.Plugin.BetterTalk
             {
                 File.Copy(talkingtxtFileD, path4);
             }
+            if (!File.Exists(path5))
+            {
+                File.Copy(talkingtxtFilePlay, path5);
+            }
+            if (!File.Exists(path6))
+            { 
+                File.Copy(talkingtxtFileJump, path6);
+            }
+            if (!File.Exists(path7))
+            {
+                File.Copy(talkingtxtFileLive, path7);
+            }
+            if (!File.Exists(path8))
+            {
+                File.Copy(talkingtxtFileWork, path8);
+            }
+            if (!File.Exists(path9))
+            {
+                File.Copy(talkingtxtFileSleep, path9);
+            }
             string[] array = File.ReadAllLines(path4);
             foreach (string item in array)
             {
                 timertext!.Add(item);
             }
             string[] array2 = File.ReadAllLines(path);
-            foreach (string item2 in array2)
+            foreach (string item in array2)
             {
-                touchHeadtext!.Add(item2);
+                touchHeadtext!.Add(item);
             }
             string[] array3 = File.ReadAllLines(path2);
-            foreach (string item3 in array3)
+            foreach (string item in array3)
             {
-                touchBodytext!.Add(item3);
+                touchBodytext!.Add(item);
+            }
+            string[] array4 = File.ReadAllLines(path5);
+            foreach (string item in array4)
+            {
+                playtext!.Add(item);
+            }
+            string[] array5 = File.ReadAllLines(path6);
+            foreach (string item in array5)
+            {
+                playjumptext!.Add(item);
+            }
+            string[] array6 = File.ReadAllLines(path7);
+            foreach (string item in array6)
+            {
+                livetext!.Add(item);
+            }
+            string[] array7 = File.ReadAllLines(path8);
+            foreach (string item in array7)
+            {
+                worktext!.Add(item);
+            }
+
+            string[] array8 = File.ReadAllLines(path9);
+            foreach (string item in array8)
+            {
+                sleeptext!.Add(item);
             }
         }
 
@@ -494,11 +645,6 @@ namespace VPet.Plugin.BetterTalk
             msgbar.CloseTimer.Interval = 80;
 
         }
-       public void ClockSay()
-        {
-            
-        }
-
 
 
         private void RelsSelect()
@@ -596,6 +742,14 @@ namespace VPet.Plugin.BetterTalk
             }
             msgbar.ShowTimer.Stop();
             msgbar.EndTimer.Start();
+        }
+
+        public void CheckIsSleeping(string message)
+        {
+            if (MW.Main.State != Main.WorkingState.Sleep)
+            {
+                MW.Main.SayRnd(message);
+            }
         }
     }
 }
